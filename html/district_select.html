@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISUALIZATION</title>
+    <style>
+        body {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(../new3.jpeg);
+    background-size: cover; /* Ensure the background image covers the entire page */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-attachment: fixed; /* Ensure the background image remains fixed as the page scrolls */
+    padding-top: 0%;
+    color: #080808; /* Text color */
+    font-weight: bold;
+    margin: 0; /* Remove default margin */
+  }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #001F3F;
+            color: #fff;
+            padding: 10px 10px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(50vh - 70px); /* Adjusted for header height */
+            padding-top: 70px;
+            box-sizing: border-box;
+
+        }
+
+        .dropdown-container {
+            background-color: rgba(241, 245, 245, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown {
+            width: 300px;
+            padding: 10px;
+            font-size: 1rem;
+            margin: 10px 0;
+            background-color: #17202A;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .dropdown option {
+            background-color: #17202A;
+            color: #fff;
+        }
+
+        .enter-btn {
+            background-color: #f30808;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .enter-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../assets/img/logo.png" alt="Karnataka Police Logo" class="logo">
+        <h1>KARNATAKA POLICE</h1>
+    </header>
+    <div class="container">
+        <div class="dropdown-container">
+            <select id="districts" class="dropdown">
+                <option value="" disabled selected>Select District</option>
+                <!-- Options here -->
+                <option value="Bagalkot">Bagalkot</option>
+                <option value="Ballari">Ballari</option>
+                <option value="Belagavi City">Belagavi City</option>
+                <option value="Belagavi Dist">Belagavi Dist</option>
+                <option value="Bengaluru City">Bengaluru City</option>
+                <option value="Bengaluru Dist">Bengaluru Dist</option>
+                <option value="Bidar">Bidar</option>
+                <option value="Chamarajanagar">Chamarajanagar</option>
+                <option value="Chickballapura">Chickballapura</option>
+                <option value="Chikkamagaluru">Chikkamagaluru</option>
+                <option value="Chitradurga">Chitradurga</option>
+                <option value="CID">CID</option>
+                <option value="Coastal Security Police">Coastal Security Police</option>
+                <option value="Dakshina Kannada">Dakshina Kannada</option>
+                <option value="Davanagere">Davanagere</option>
+                <option value="Dharwad">Dharwad</option>
+                <option value="Gadag">Gadag</option>
+                <option value="Hassan">Hassan</option>
+                <option value="Haveri">Haveri</option>
+                <option value="Hubballi Dharwad City">Hubballi Dharwad City</option>
+                <option value="ISD Bengaluru">ISD Bengaluru</option>
+                <option value="K.G.F">K.G.F</option>
+                <option value="Kalaburagi">Kalaburagi</option>
+                <option value="Kalaburagi City">Kalaburagi City</option>
+                <option value="Karnataka Railways">Karnataka Railways</option>
+                <option value="Kodagu">Kodagu</option>
+                <option value="Kolar">Kolar</option>
+                <option value="Koppal">Koppal</option>
+                <option value="Mandya">Mandya</option>
+                <option value="Mangaluru City">Mangaluru City</option>
+                <option value="Mysuru City">Mysuru City</option>
+                <option value="Mysuru Dist">Mysuru Dist</option>
+                <option value="Raichur">Raichur</option>
+                <option value="Ramanagara">Ramanagara</option>
+                <option value="Shivamogga">Shivamogga</option>
+                <option value="Tumakuru">Tumakuru</option>
+                <option value="Udupi">Udupi</option>
+                <option value="Uttara Kannada">Uttara Kannada</option>
+                <option value="Vijayanagara">Vijayanagara</option>
+                <option value="Vijayapur">Vijayapur</option>
+                <option value="Yadgir">Yadgir</option>
+            </select>
+            <select id="units" class="dropdown">
+                <option value="" disabled selected>Select Unit</option>
+                <!-- Options here -->
+                <option value="Amengad PS">Amengad PS</option>
+                <option value="Anekal">Anekal PS</option>
+                <option value="Alur PS">Alur PS</option>
+                <option value="Bagalkot Rural PS">Bagalkot Rural PS</option>
+                <option value="Bagalkot Town PS">Bagalkot Town PS</option>
+                <option value="Bagalkot Traffic PS">Bagalkot Traffic PS</option>
+                <option value="Bagalkot Women PS">Bagalkot Women PS</option>
+                <option value="Banahatti PS">Banahatti PS</option>
+                <option value="Bilagi PS">Bilagi PS</option>
+                <option value="Guledagudda PS">Guledagudda PS</option>
+                <option value="Hungunda PS">Hungunda PS</option>
+                <option value="Ilakal PS">Ilakal PS</option>
+                <option value="Ilakal Rural PS">Ilakal Rural PS</option>
+                <option value="Jamakhandi Rural PS">Jamakhandi Rural PS</option>
+                <option value="Jamakhandi Town PS">Jamakhandi Town PS</option>
+                <option value="Kaladagi PS">Kaladagi PS</option>
+                <option value="Kerur PS">Kerur PS</option>
+                <option value="Lokapur PS">Lokapur PS</option>
+                <option value="Mahalingapur PS">Mahalingapur PS</option>
+                <option value="Mudhol PS">Mudhol PS</option>
+                <option value="Navanagara PS">Navanagara PS</option>
+                <option value="Savalgi PS">Savalgi PS</option>
+                <option value="Teradal PS">Teradal PS</option>
+                <option value="APMC Yard PS">APMC Yard PS</option>
+                <option value="Ballari CEN Crime PS">Ballari CEN Crime PS</option>
+                <option value="Ballari Women PS">Ballari Women PS</option>
+                <option value="Bellary Rural PS">Bellary Rural PS</option>
+                <option value="Bellary Traffic PS">Bellary Traffic PS</option>
+                <option value="Brucepet PS">Brucepet PS</option>
+                <option value="Choranuru PS">Choranuru PS</option>
+                <option value="Cowlbazar PS">Cowlbazar PS</option>
+                <option value="Gadiganur PS">Gadiganur PS</option>
+                <option value="Gandhinagar PS">Gandhinagar PS</option>
+                <option value="Hatcholli PS">Hatcholli PS</option>
+                <option value="Kampli PS">Kampli PS</option>
+                <option value="Kuduthini PS">Kuduthini PS</option>
+                <option value="Kurugod PS">Kurugod PS</option>
+                <option value="Moka PS">Moka PS</option>
+                <option value="P.D. Halli PS">P.D. Halli PS</option>
+                <option value="Sandur PS">Sandur PS</option>
+                <option value="Sirigeri PS">Sirigeri PS</option>
+                <option value="Siruguppa PS">Siruguppa PS</option>
+                <option value="Tekkalkota PS">Tekkalkota PS</option>
+                <option value="Thoranagal PS">Thoranagal PS</option>
+                <option value="Bagewadi PS">Bagewadi PS</option>
+                <option value="Belagavi City CEN Crime PS">Belagavi City CEN Crime PS</option>
+                <option value="Belagavi City Women PS">Belagavi City Women PS</option>
+                <option value="Belagavi Rural PS">Belagavi Rural PS</option>
+                <option value="Belgaum North Traffic PS">Belgaum North Traffic PS</option>
+                <option value="Belgaum South Traffic PS">Belgaum South Traffic PS</option>
+            </select>
+        </div>
+        <button class="enter-btn" id="enterBtn">Enter</button>
+    </div>
+
+    <script>
+        document.getElementById('enterBtn').addEventListener('click', function() {
+            var selectedDistrict = document.getElementById('districts').value;
+            var selectedUnit = document.getElementById('units').value;
+            // Perform redirection based on selected district and unit
+            if (selectedDistrict && selectedUnit) {
+                if (selectedDistrict === 'Bagalkot' && selectedUnit === 'Bagalkot Rural PS') {
+                    window.location.href = 'helpdesk1.html';
+                } else if (selectedDistrict === 'Bengaluru Dist' && selectedUnit === 'Anekal') {
+                    window.location.href = 'Anekal.html';
+                } else if (selectedDistrict === 'Hassan' && selectedUnit === 'Alur PS') {
+                    window.location.href = 'Hassan.html';
+                } else {
+                    alert('Combination not supported.');
+                }
+            } else {
+                alert('Please select both district and unit before entering.');
+            }
+        });
+    </script>
+</body>
+</html>

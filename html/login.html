@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Glassmorphism Login</title>
+  <link rel="stylesheet" href="../login/style.css">
+  <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        body.fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<body>
+    
+    <section class="container">
+        <div class="login-container">
+            <div class="circle circle-one"></div>
+            <div class="form-container">
+                <img src="../login/file.png" alt="illustration" class="illustration" />
+                <h1 class="opacity" style="color: #f1f2f4;">LOGIN FOR PI/PI's</h1>
+                <form>
+                    <input type="text" placeholder="USERNAME" style="color: #f8f8f9;"/>
+                    <input type="password" placeholder="PASSWORD" style="color: #f6f6f7; "/><br><br>
+                    <center><a href="Aaa.html" style="color: #f9fbfd; font-size: larger;"><button="opacity">ENTER</a></center></button></center>
+                </form>
+                <!-- <div class="register-forget opacity">
+                    <a href="">REGISTER</a>
+                    <a href="">FORGOT PASSWORD</a>
+                </div> -->
+            </div>
+            <div class="circle circle-two"></div>
+        </div>
+        <div class="theme-btn-container"></div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('fade-in');
+        });
+    </script>
+</body>
+<!-- partial -->
+  <script  src="../login/script.js"></script>
+
+</body>
+</html>

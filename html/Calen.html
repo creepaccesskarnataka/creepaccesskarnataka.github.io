@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duty Roster Calendar</title>
+<style>
+  body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background: linear-gradient(35deg, rgb(4, 0, 0), #00ddff);
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #fff;
+    font-size: 48px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  #calendar-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+  }
+
+  #calendar-controls select {
+    padding: 15px;
+    font-size: 18px;
+    background-color: #171818;
+    border: none;
+    border-radius: 5px;
+    color: #fdfbfb;
+    font-weight: bold;
+    width: 500px;
+  }
+
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    width: 95%;
+    height: 75vh;
+    overflow-y: auto;
+  }
+
+  .calendar-day {
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: #05d9ff;
+  }
+
+  .calendar-day:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .calendar-day.duty {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .calendar-day .duty-text {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 24px;
+    color: #05d9ff;
+    font-weight: bold;
+  }
+
+  .day-header {
+    background-color: rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(7, 3, 0, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+    text-align: center;
+  }
+
+  .modal.show {
+    display: block;
+  }
+
+  .modal h2 {
+    margin-bottom: 20px;
+    color: #fbf7f7;
+  }
+
+  .modal input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  .modal button {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .modal button:hover {
+    background-color: #2980b9;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<h1>Duty Allocation</h1>
+
+<div id="calendar-controls">
+  <select id="year-select"></select>
+  <select id="month-select"></select>
+</div>
+
+<div id="calendar"></div>
+
+<div id="dutyModal" class="modal">
+  <span class="modal-close" onclick="closeModal()">&times;</span>
+  <h2>Enter Duty</h2>
+  <input type="text" id="dutyInput" placeholder="Enter duty">
+  <button onclick="saveDuty()">Save</button>
+</div>
+
+<script>
+  // Get current date
+  const today = new Date();
+  let currentMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+  let activeDayElement = null;
+
+  const monthNames = ["January", "February", "March", "April", "May", "June", 
+                      "July", "August", "September", "October", "November", "December"];
+
+  // Populate year and month dropdowns
+  function populateYearMonthSelectors() {
+    const yearSelect = document.getElementById('year-select');
+    const monthSelect = document.getElementById('month-select');
+
+    for (let year = currentYear - 10; year <= currentYear + 10; year++) {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      if (year === currentYear) option.selected = true;
+      yearSelect.appendChild(option);
+    }
+
+    monthNames.forEach((month, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = month;
+      if (index === currentMonth) option.selected = true;
+      monthSelect.appendChild(option);
+    });
+  }
+
+  // Render the calendar
+  function renderCalendar(month, year) {
+    const calendar = document.getElementById('calendar');
+    calendar.innerHTML = ''; // Clear previous calendar
+
+    const firstDay = new Date(year, month).getDay();
+    const daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+    // Days of the week
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    daysOfWeek.forEach(day => {
+      const dayElement = document.createElement('div');
+      dayElement.textContent = day;
+      dayElement.classList.add('calendar-day', 'day-header');
+      calendar.appendChild(dayElement);
+    });
+
+    // Add empty cells for days of the previous month
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.classList.add('calendar-day');
+      emptyCell.style.backgroundColor = 'transparent';
+      calendar.appendChild(emptyCell);
+    }
+
+    // Add the days of the current month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('calendar-day');
+      dayElement.textContent = day;
+      dayElement.addEventListener('click', () => openModal(dayElement));
+      calendar.appendChild(dayElement);
+    }
+
+    // Check if there are duties for the current day and alert
+    checkTodayDuty();
+  }
+
+  // Open modal to enter duty
+  function openModal(dayElement) {
+    activeDayElement = dayElement;
+    const modal = document.getElementById('dutyModal');
+    modal.classList.add('show');
+  }
+
+  // Close modal
+  function closeModal() {
+    const modal = document.getElementById('dutyModal');
+    modal.classList.remove('show');
+  }
+
+  // Save duty
+  function saveDuty() {
+    const dutyInput = document.getElementById('dutyInput');
+    const dutyText = dutyInput.value.trim();
+    if (dutyText !== '') {
+      activeDayElement.classList.add('duty');
+      const dutyElement = document.createElement('p');
+      dutyElement.classList.add('duty-text');
+      dutyElement.textContent = dutyText;
+      activeDayElement.innerHTML = activeDayElement.textContent.split('\n')[0]; // Keep only the day number
+      activeDayElement.appendChild(dutyElement);
+      dutyInput.value = '';
+      closeModal();
+      saveDutyToLocal(activeDayElement.dataset.date, dutyText); // Saving duty to local storage
+    } else {
+      alert('Please enter a duty.');
+    }
+  }
+
+  // Save duty to local storage
+  function saveDutyToLocal(date, duty) {
+    // You can customize this function to save duty details to local storage
+    const dutyData = {
+      date: date,
+      duty: duty
+    };
+    localStorage.setItem('dutyData', JSON.stringify(dutyData));
+  }
+
+  // Check if there are duties for the current day and alert
+  function checkTodayDuty() {
+    const today = new Date();
+    const currentDay = today.getDate();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const activeDay = document.querySelector(`.calendar-day:not(.day-header)[data-date="${currentYear}-${currentMonth + 1}-${currentDay}"]`);
+    if (activeDay && activeDay.querySelector('.duty-text')) {
+      alert(`You have a duty today:\n${activeDay.querySelector('.duty-text').textContent}`);
+    }
+  }
+
+  // Handle month and year change
+  document.getElementById('year-select').addEventListener('change', (e) => {
+    currentYear = parseInt(e.target.value);
+    renderCalendar(currentMonth, currentYear);
+  });
+
+  document.getElementById('month-select').addEventListener('change', (e) => {
+    currentMonth = parseInt(e.target.value);
+    renderCalendar(currentMonth, currentYear);
+  });
+
+  // Initial setup
+  populateYearMonthSelectors();
+  renderCalendar(currentMonth, currentYear);
+</script>
+
+</body>
+</html>
+
+      
